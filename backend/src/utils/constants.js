@@ -1,0 +1,41 @@
+// Apify API Configuration
+const APIFY_BASE_URL = 'https://api.apify.com/v2';
+
+// HTTP Status Codes
+const HTTP_STATUS = {
+  OK: 200,
+  CREATED: 201,
+  BAD_REQUEST: 400,
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  NOT_FOUND: 404,
+  REQUEST_TIMEOUT: 408,
+  TOO_MANY_REQUESTS: 429,
+  INTERNAL_SERVER_ERROR: 500,
+  SERVICE_UNAVAILABLE: 503
+};
+
+// Actor Run Status
+const RUN_STATUS = {
+  RUNNING: 'RUNNING',
+  SUCCEEDED: 'SUCCEEDED',
+  FAILED: 'FAILED',
+  ABORTED: 'ABORTED',
+  TIMED_OUT: 'TIMED-OUT'
+};
+
+// Default Configuration
+const DEFAULT_CONFIG = {
+  TIMEOUT: 30000,
+  MAX_WAIT_TIME: 60000,
+  CHECK_INTERVAL: 2000,
+  RATE_LIMIT_WINDOW: 15 * 60 * 1000, // 15 minutes
+  RATE_LIMIT_MAX: 100
+};
+
+module.exports = {
+  APIFY_BASE_URL,
+  HTTP_STATUS,
+  RUN_STATUS,
+  DEFAULT_CONFIG
+}; 
