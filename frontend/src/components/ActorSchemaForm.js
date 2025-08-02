@@ -182,6 +182,31 @@ const ActorSchemaForm = ({
         );
 
       case 'array':
+        // Special handling for startUrls array
+        if (key === 'startUrls') {
+          return (
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
+                {property.title || key}
+              </label>
+              <textarea
+                value={Array.isArray(value) ? value.map(item => item.url || item).join('\n') : ''}
+                onChange={(e) => {
+                  const urls = e.target.value.split('\n').filter(item => item.trim());
+                  const urlObjects = urls.map(url => ({ url: url.trim() }));
+                  handleInputChange(key, urlObjects);
+                }}
+                placeholder="Enter URLs (one per line)"
+                rows={3}
+                className={`${baseClasses} ${errorClasses}`}
+              />
+              <p className="text-xs text-gray-500">
+                Enter one URL per line. Each URL will be converted to the required format.
+              </p>
+            </div>
+          );
+        }
+        
         return (
           <textarea
             value={Array.isArray(value) ? value.join('\n') : ''}
@@ -225,17 +250,22 @@ const ActorSchemaForm = ({
 
   if (loading) {
     return (
-      <div className="card">
-        <div className="flex items-center mb-4">
-          <Settings className="w-5 h-5 mr-2 text-primary-600" />
-          <h2 className="text-xl font-semibold text-gray-900">Input Schema</h2>
-          <div className="loading-spinner w-5 h-5 border-2 border-primary-600 border-t-transparent rounded-full ml-auto" />
+      <div>
+        <div className="flex items-center mb-6">
+          <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center mr-4">
+            <Settings className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">Input Schema</h2>
+            <p className="text-gray-600">Configure actor parameters</p>
+          </div>
+          <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin ml-auto" />
         </div>
-        <div className="space-y-3">
+        <div className="space-y-4">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="animate-pulse">
+            <div key={i} className="animate-pulse bg-gray-100 rounded-xl p-4">
               <div className="h-4 bg-gray-200 rounded w-1/4 mb-2"></div>
-              <div className="h-10 bg-gray-200 rounded"></div>
+              <div className="h-10 bg-gray-200 rounded-lg"></div>
             </div>
           ))}
         </div>
@@ -245,14 +275,22 @@ const ActorSchemaForm = ({
 
   if (error) {
     return (
-      <div className="card">
-        <div className="flex items-center mb-4">
-          <Settings className="w-5 h-5 mr-2 text-primary-600" />
-          <h2 className="text-xl font-semibold text-gray-900">Input Schema</h2>
+      <div>
+        <div className="flex items-center mb-6">
+          <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center mr-4">
+            <Settings className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">Input Schema</h2>
+            <p className="text-gray-600">Configure actor parameters</p>
+          </div>
         </div>
-        <div className="flex items-center p-3 bg-red-50 border border-red-200 rounded-lg">
-          <AlertCircle className="w-5 h-5 text-red-600 mr-2" />
-          <span className="text-sm text-red-800">Failed to load schema: {error}</span>
+        <div className="flex items-center p-4 bg-red-50 border border-red-200 rounded-xl">
+          <AlertCircle className="w-5 h-5 text-red-600 mr-3" />
+          <div>
+            <span className="text-sm font-medium text-red-800">Failed to load schema</span>
+            <p className="text-xs text-red-700 mt-1">{error}</p>
+          </div>
         </div>
       </div>
     );
@@ -260,42 +298,55 @@ const ActorSchemaForm = ({
 
   if (!schema || !schema.properties) {
     return (
-      <div className="card">
-        <div className="flex items-center mb-4">
-          <Settings className="w-5 h-5 mr-2 text-primary-600" />
-          <h2 className="text-xl font-semibold text-gray-900">Input Schema</h2>
+      <div>
+        <div className="flex items-center mb-6">
+          <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center mr-4">
+            <Settings className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">Input Schema</h2>
+            <p className="text-gray-600">Configure actor parameters</p>
+          </div>
         </div>
-        <div className="text-center py-8 text-gray-500">
-          No input schema available for this actor
+        <div className="text-center py-12">
+          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Settings className="w-8 h-8 text-gray-400" />
+          </div>
+          <div className="text-gray-500 font-medium">No input schema available for this actor</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="card">
-      <div className="flex items-center justify-between mb-4">
+    <div>
+      <div className="flex items-center justify-between mb-6">
         <div className="flex items-center">
-          <Settings className="w-5 h-5 mr-2 text-primary-600" />
-          <h2 className="text-xl font-semibold text-gray-900">Input Parameters</h2>
+          <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center mr-4">
+            <Settings className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">Input Parameters</h2>
+            <p className="text-gray-600">Configure actor parameters</p>
+          </div>
         </div>
         {executionLoading && (
-          <div className="flex items-center text-primary-600">
-            <div className="loading-spinner w-4 h-4 border-2 border-primary-600 border-t-transparent rounded-full mr-2" />
-            <span className="text-sm">Executing...</span>
+          <div className="flex items-center bg-blue-50 text-blue-700 px-4 py-2 rounded-full">
+            <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mr-2" />
+            <span className="text-sm font-medium">Executing...</span>
           </div>
         )}
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-6">
         {Object.keys(schema.properties).map(key => {
           const property = schema.properties[key];
           const isRequired = schema.required && schema.required.includes(key);
           const error = validationErrors[key];
 
           return (
-            <div key={key} className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">
+            <div key={key} className="space-y-3">
+              <label className="block text-sm font-semibold text-gray-700">
                 {property.title || key}
                 {isRequired && <span className="text-red-500 ml-1">*</span>}
               </label>
@@ -303,7 +354,7 @@ const ActorSchemaForm = ({
               {renderInputField(key, property)}
               
               {property.description && (
-                <p className="text-xs text-gray-500">{property.description}</p>
+                <p className="text-xs text-gray-500 leading-relaxed">{property.description}</p>
               )}
               
               {error && (
@@ -326,16 +377,16 @@ const ActorSchemaForm = ({
         <button
           type="submit"
           disabled={executionLoading}
-          className="btn-primary w-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full inline-flex items-center justify-center px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl"
         >
           {executionLoading ? (
             <>
-              <div className="loading-spinner w-4 h-4 mr-2 border-2 border-white border-t-transparent rounded-full" />
+              <div className="w-5 h-5 mr-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
               Executing Actor...
             </>
           ) : (
             <>
-              <Play className="w-4 h-4 mr-2" />
+              <Play className="w-5 h-5 mr-3" />
               Execute Actor
             </>
           )}

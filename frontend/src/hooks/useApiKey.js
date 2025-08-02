@@ -38,6 +38,7 @@ export const useApiKey = () => {
 
       const isValid = response.ok;
       setIsApiKeyValid(isValid);
+      
       return isValid;
     } catch (error) {
       setIsApiKeyValid(false);

@@ -46,14 +46,22 @@ const ActorSelector = ({
 
   if (loading) {
     return (
-      <div className="card">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-gray-900">Available Actors</h2>
-          <div className="loading-spinner w-5 h-5 border-2 border-primary-600 border-t-transparent rounded-full" />
+      <div>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center">
+            <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center mr-4">
+              <Play className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">Available Actors</h2>
+              <p className="text-gray-600">Select an actor to configure and run</p>
+            </div>
+          </div>
+          <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
         </div>
-        <div className="space-y-3">
-          {[...Array(5)].map((_, i) => (
-            <div key={i} className="animate-pulse">
+        <div className="space-y-4">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="animate-pulse bg-gray-100 rounded-xl p-4">
               <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
               <div className="h-3 bg-gray-200 rounded w-1/2"></div>
             </div>
@@ -65,19 +73,32 @@ const ActorSelector = ({
 
   if (error) {
     return (
-      <div className="card">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-gray-900">Available Actors</h2>
+      <div>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center">
+            <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center mr-4">
+              <Play className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">Available Actors</h2>
+              <p className="text-gray-600">Select an actor to configure and run</p>
+            </div>
+          </div>
           <button
             onClick={handleRefresh}
-            className="btn-secondary flex items-center"
+            className="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
           >
             <RefreshCw className="w-4 h-4 mr-2" />
             Retry
           </button>
         </div>
-        <div className="text-center py-8">
-          <div className="text-red-600 mb-2">Failed to load actors</div>
+        <div className="text-center py-12">
+          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div className="text-red-600 font-semibold mb-2">Failed to load actors</div>
           <p className="text-gray-600 text-sm">{error}</p>
         </div>
       </div>
@@ -85,12 +106,20 @@ const ActorSelector = ({
   }
 
   return (
-    <div className="card">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-semibold text-gray-900">Available Actors</h2>
+    <div>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center">
+          <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center mr-4">
+            <Play className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">Available Actors</h2>
+            <p className="text-gray-600">{actors.length} actors found</p>
+          </div>
+        </div>
         <button
           onClick={handleRefresh}
-          className="btn-secondary flex items-center"
+          className="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
           disabled={loading}
         >
           <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
@@ -99,21 +128,21 @@ const ActorSelector = ({
       </div>
 
       {/* Search and Sort */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-4">
+      <div className="flex flex-col sm:flex-row gap-4 mb-6">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
           <input
             type="text"
-            placeholder="Search actors..."
+            placeholder="Search actors by name or description..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="input-field pl-10"
+            className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white/50 backdrop-blur-sm"
           />
         </div>
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
-          className="input-field sm:w-48"
+          className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white/50 backdrop-blur-sm sm:w-48"
         >
           <option value="name">Sort by Name</option>
           <option value="created">Sort by Created</option>
@@ -122,51 +151,61 @@ const ActorSelector = ({
       </div>
 
       {/* Actors List */}
-      <div className="space-y-3 max-h-96 overflow-y-auto">
+      <div className="space-y-4 max-h-96 overflow-y-auto">
         {filteredActors.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
-            {searchTerm ? 'No actors found matching your search' : 'No actors available'}
+          <div className="text-center py-12">
+            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Search className="w-8 h-8 text-gray-400" />
+            </div>
+            <div className="text-gray-500 font-medium">
+              {searchTerm ? 'No actors found matching your search' : 'No actors available'}
+            </div>
           </div>
         ) : (
           filteredActors.map((actor) => (
             <div
               key={actor.id}
               onClick={() => onActorSelect(actor)}
-              className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 hover:shadow-md ${
+              className={`p-6 border-2 rounded-xl cursor-pointer transition-all duration-200 hover:shadow-lg ${
                 selectedActor?.id === actor.id
-                  ? 'border-primary-500 bg-primary-50'
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-blue-500 bg-blue-50 shadow-lg'
+                  : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50/50'
               }`}
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-medium text-gray-900">{actor.name}</h3>
+                  <div className="flex items-center gap-3 mb-3">
+                    <h3 className="text-lg font-semibold text-gray-900">{actor.name}</h3>
                     {actor.isPublic && (
-                      <span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">
+                      <span className="px-3 py-1 text-xs bg-green-100 text-green-800 rounded-full font-medium">
                         Public
                       </span>
                     )}
                     {actor.isDeprecated && (
-                      <span className="px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full">
+                      <span className="px-3 py-1 text-xs bg-red-100 text-red-800 rounded-full font-medium">
                         Deprecated
+                      </span>
+                    )}
+                    {actor.source === 'user' && (
+                      <span className="px-3 py-1 text-xs bg-blue-100 text-blue-800 rounded-full font-medium">
+                        Your Actor
                       </span>
                     )}
                   </div>
                   
                   {actor.description && (
-                    <p className="text-sm text-gray-600 mb-2 line-clamp-2">
+                    <p className="text-sm text-gray-600 mb-4 line-clamp-2 leading-relaxed">
                       {actor.description}
                     </p>
                   )}
                   
-                  <div className="flex items-center gap-4 text-xs text-gray-500">
+                  <div className="flex items-center gap-6 text-xs text-gray-500">
                     <div className="flex items-center">
-                      <Users className="w-3 h-3 mr-1" />
+                      <Users className="w-4 h-4 mr-2" />
                       {actor.username}
                     </div>
                     <div className="flex items-center">
-                      <Calendar className="w-3 h-3 mr-1" />
+                      <Calendar className="w-4 h-4 mr-2" />
                       {formatDate(actor.createdAt)}
                     </div>
                     {actor.stats && (
